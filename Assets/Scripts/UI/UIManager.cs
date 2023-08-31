@@ -43,7 +43,7 @@ namespace Game.UI
 
         void Update()
         {
-            if(Input.GetKeyDown(KeyCode.Escape) && GameManager.instance.isDiving)
+            if(Input.GetKeyDown(KeyCode.Escape) && GameManagerOld.instance.isDiving)
             {
                 PauseUI();
             }
@@ -63,8 +63,8 @@ namespace Game.UI
         public void DiveUI()
         {
             mainUI.SetActive(false);
-            GameManager.instance.startedDiving = true;
-            Invoke("StartDiveUI",GameManager.instance.diveUIStartTime);
+            GameManagerOld.instance.startedDiving = true;
+            Invoke("StartDiveUI",GameManagerOld.instance.diveUIStartTime);
         }
         public void SettingsUI()
         {
@@ -102,7 +102,7 @@ namespace Game.UI
             hasPausedGame = !hasPausedGame;
             pauseUI.SetActive(!pauseUI.activeSelf);
             gameUI.SetActive(!gameUI.activeSelf);
-            GameManager.instance.UpdateMouseState();
+            GameManagerOld.instance.UpdateMouseState();
             if(hasPausedGame)
             {
                 Time.timeScale = 0f;

@@ -20,7 +20,7 @@ public class SpeedRunTimer : MonoBehaviour
 
     void FixedUpdate()
     {
-        if(GameManager.instance.isDiving)
+        if(GameManagerOld.instance.isDiving)
         {
             CalculateTime();
             UpdateTime();

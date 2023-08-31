@@ -34,7 +34,7 @@ public class FishAI : MonoBehaviour
 
     void FixedUpdate()
     {
-        if(GameManager.instance.isDiving)
+        if(GameManagerOld.instance.isDiving)
         {
             MoveForward();
             CheckHit();

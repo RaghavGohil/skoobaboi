@@ -1,102 +1,80 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using Game.UI;
-using Game.Sound;
+/**
+@RaghavGohil on github.
 
-public class GameManager : MonoBehaviour
+some conventions to follow while reading the program:
+public variables and user-defined types are written with the PascalCase
+private, protected variables and function params are written with the snakeCase
+constants and readonly variables are written in MACROCASE
+**/
+
+using UnityEngine;
+using System;
+
+public enum GameState // We want to access the gamestate everywhere.
+{
+    gameStart,
+    startedDiving,
+    isDiving,
+    lose,
+    win,
+}
+
+public sealed class GameManager : MonoBehaviour
 {
 
+    public static GameManager Instance;
 
-    public static GameManager instance;
+    // Game state handling:
 
-    public bool startedDiving;
-    public bool isDiving;
+    [HideInInspector]
+    public GameState CurrentGameState;
 
-    bool canDive;
-    
-    [SerializeField]
-    GameObject character,lobbyCamera,playerCamera,player;
-    [SerializeField]
-    GameObject bounds;
+    // Events:
 
-    public float diveUIStartTime{get;private set;}
-    float diveTransitionTime;
-    public Vector3 cameraRotation;
+    public static event Action GameStartAction, StartedDivingAction, IsDivingAction, LoseAction, WinAction;
+    public static event Action<GameState> OnGameStateChanged;
+
+    void Awake()
+    {
+        // manager is singleton
+        if(Instance == null)
+            Instance = this;
+        else
+            Destroy(Instance);
+    }
 
     void Start()
     {
-        instance = this;
-        InitializeDefaults();
+        CurrentGameState = GameState.gameStart;
     }
 
-    public void InitializeDefaults()
+    public void SwitchGameState(GameState newState)
     {
-        diveUIStartTime = 4.0f;
-        diveTransitionTime = 4.0f;
-        canDive = true;
-        startedDiving = false;
-        isDiving = false;
-        character.SetActive(true);
-        bounds.SetActive(false);
-        lobbyCamera.SetActive(true);
-        playerCamera.SetActive(false);
-        AudioManager.instance.PlayInGame("abovewater");
-    }
 
-    void FixedUpdate()
-    {
-        StartDiving();
-        UpdateMouseState();
-    }
-    
-    void StartDiving()
-    {
-        if(startedDiving && canDive)
+        CurrentGameState = newState;
+
+        switch(newState)
         {
-            canDive = false;
-            AudioManager.instance.increasingAmbientVolume = true;
-            FishGenerator.instance.SpawnFishes();
-            character.transform.GetComponent<Animator>().Play("Dive");
-            lobbyCamera.GetComponent<Animator>().Play("Dive");
-            StartCoroutine(SetDiving());
-            Invoke("ActivateBoundsAndFog",0.8f);
+            case GameState.gameStart:
+                GameStartAction?.Invoke();
+                break;
+            case GameState.startedDiving:
+                StartedDivingAction?.Invoke();
+                break;
+            case GameState.isDiving:
+                IsDivingAction?.Invoke();
+                break;
+            case GameState.lose:
+                LoseAction?.Invoke();
+                break;
+            case GameState.win:
+                WinAction?.Invoke();
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(newState), newState, null);
         }
+
+        OnGameStateChanged?.Invoke(newState);
     }
 
-    public void UpdateMouseState()
-    {
-        if(isDiving)
-        {
-            if(!UIManager.instance.hasPausedGame)
-                Cursor.lockState = CursorLockMode.Locked;
-            else
-                Cursor.lockState = CursorLockMode.None;
-        }
-    }
-
-    void ActivateBoundsAndFog()
-    {
-        bounds.SetActive(true);
-        RenderSettings.fog = true;
-    }
-
-    IEnumerator SetDiving()
-    {
-
-        yield return new WaitForSeconds(diveTransitionTime);
-
-        startedDiving = false;
-        isDiving = true;
-
-        //char model
-        character.SetActive(false);
-
-        //camera desync
-        Vector3 playerPos = lobbyCamera.transform.position;
-        cameraRotation = lobbyCamera.transform.eulerAngles;
-        lobbyCamera.SetActive(false);
-        player.transform.position = playerPos;
-        playerCamera.SetActive(true);
-    }
 }

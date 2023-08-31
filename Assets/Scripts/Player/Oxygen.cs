@@ -37,7 +37,7 @@ public class Oxygen : PlayerStatusBar
     void DecreaseTank()
     {
     
-        if(GameManager.instance.isDiving && runOutTime > 0)
+        if(GameManagerOld.instance.isDiving && runOutTime > 0)
         {
 
             float depletionRate = sliderMaxValue/runOutTime;
