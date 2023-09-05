@@ -4,9 +4,9 @@ public class MinimapFollow : MonoBehaviour
 {
 
     [SerializeField]
-    GameObject lookAt;
+    Transform lookAt;
     [SerializeField]
-    GameObject boatPlane;
+    Transform boatPlane;
     LineRenderer lineRenderer;
 
     [SerializeField]
@@ -26,20 +26,20 @@ public class MinimapFollow : MonoBehaviour
 
     void RotateMarker()
     {
-        playerMarker.localEulerAngles = new Vector3(0,0,-lookAt.transform.localEulerAngles.y+180);
+        playerMarker.localEulerAngles = new Vector3(0,0,-lookAt.localEulerAngles.y+180);
     }
 
     void MoveCamera()
     {
-        transform.position = new Vector3(lookAt.transform.position.x,transform.position.y,lookAt.transform.position.z);
+        transform.position = new Vector3(lookAt.position.x,transform.position.y,lookAt.position.z);
     }
 
     void DrawRenderer()
     {
         Vector3[] positions = new Vector3[2];
 
-        positions[0] = lookAt.transform.position;
-        positions[1] = boatPlane.transform.position;
+        positions[0] = lookAt.position;
+        positions[1] = boatPlane.position;
 
         lineRenderer.SetPositions(positions);
     }

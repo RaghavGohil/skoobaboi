@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 532921330230893025}
   - component: {fileID: -8416828119534682343}
   - component: {fileID: 4144480355121470731}
+  - component: {fileID: 322198788580292147}
   m_Layer: 0
   m_Name: RoboFish
   m_TagString: robo
@@ -125,3 +126,15 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.11602996, y: 0.09015008, z: 0.09857909}
   m_Center: {x: 0.030151732, y: 0.00000001303852, z: 0.008697521}
+--- !u!114 &322198788580292147
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2105935456285452291}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34da3f18e627c584a90dc9757bf27d68, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

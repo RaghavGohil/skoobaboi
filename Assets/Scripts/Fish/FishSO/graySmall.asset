@@ -16,7 +16,9 @@ MonoBehaviour:
     type: 3}
   numFishes: 100
   levelGenerated: 0100000002000000030000000400000005000000
-  speed: 3
+  speed: 2
   rotationSpeed: 40
   collisionDetectRayDistance: 10
   collisionDetectRayOffset: 1
+  viewRangeRadius: 5
+  attackRangeRadius: 1

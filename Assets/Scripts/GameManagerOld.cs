@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Game.UI;
 using Game.Sound;
+using Game.Helpers;
 
 public class GameManagerOld : MonoBehaviour
 {
@@ -26,8 +27,14 @@ public class GameManagerOld : MonoBehaviour
 
     void Start()
     {
+
         instance = this;
         InitializeDefaults();
+
+        // helpers
+        Helpers.canDrawDebugRays = false;
+        Helpers.canDrawDebugSpheres = true;
+    
     }
 
     public void InitializeDefaults()

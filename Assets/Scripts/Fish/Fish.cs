@@ -14,5 +14,8 @@ public class Fish : ScriptableObject
 
     public float collisionDetectRayOffset;
 
-    public bool isHostile;
+    [Header("For hostile fishes")]
+
+    public float viewRangeRadius;
+    public float attackRangeRadius;
 }

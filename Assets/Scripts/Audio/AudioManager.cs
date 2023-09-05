@@ -2,6 +2,8 @@ using UnityEngine;
 using UnityEngine.Audio;
 using Game.UI;
 
+// I will not touch this script as it has several references in game lole
+
 namespace Game.Sound
 {
     [System.Serializable]

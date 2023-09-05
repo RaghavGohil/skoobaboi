@@ -109,6 +109,7 @@ GameObject:
   - component: {fileID: -8733396207219931069}
   - component: {fileID: -1096450255575537413}
   - component: {fileID: -3911800021434606123}
+  - component: {fileID: -3849259312736496583}
   m_Layer: 0
   m_Name: RedMediumFish
   m_TagString: redMedium
@@ -192,6 +193,18 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 8.120899, y: 2.1954772, z: 0.7854533}
   m_Center: {x: 0.34136724, y: -0.10643971, z: 7.715152}
+--- !u!114 &-3849259312736496583
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5466964539767196452}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34da3f18e627c584a90dc9757bf27d68, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8477688749369407605
 GameObject:
   m_ObjectHideFlags: 0

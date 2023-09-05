@@ -53,7 +53,7 @@ public class Oxygen : PlayerStatusBar
     {
         if(sliderValue < 0)
         {
-            UIManager.instance.YouLoseUI();
+            UIManager.instance.LoseUI();
         }
     }
 

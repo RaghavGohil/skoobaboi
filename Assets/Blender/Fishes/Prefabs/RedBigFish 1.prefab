@@ -109,6 +109,7 @@ GameObject:
   - component: {fileID: 7528623801788296001}
   - component: {fileID: 3418302986560244080}
   - component: {fileID: 1999804332713916094}
+  - component: {fileID: -585937079102157261}
   m_Layer: 0
   m_Name: RedBigFish 1
   m_TagString: redBig
@@ -192,6 +193,18 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 12.049779, y: 3.425178, z: 0.78636265}
   m_Center: {x: 0.8409047, y: -0.29671764, z: 12.060823}
+--- !u!114 &-585937079102157261
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7699882764400547845}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34da3f18e627c584a90dc9757bf27d68, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8950309454427611659
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,11 +1,14 @@
 using UnityEngine;
+using Game.Helpers;
 
 public class FishAI : MonoBehaviour
 {
-
     RaycastHit hitCenter;
     RaycastHit hitLeft;
     RaycastHit hitRight;
+
+    int withoutPlayerMask;
+    int playerMaskIndex; // to exclude the player from the raycast physics
 
     FishData fishData;
     int randomRotationClamp;
@@ -21,12 +24,12 @@ public class FishAI : MonoBehaviour
 
     void Start()
     {
+        AvoidPlayer();
         fishData = GetComponent<FishData>();
         canRotateRandomly = true;
         randomRotationClamp = 5;
         randomTime = Random.Range(2,randomRotationClamp);
         randomRotationDirection = Random.Range(0,2);
-        print(randomRotationDirection);
         currentTime = 0f;
         randomRotationDuration = 5;
         directionalCheckRotateDegree = 45;
@@ -41,6 +44,13 @@ public class FishAI : MonoBehaviour
             if(canRotateRandomly)
                 RotateRandomly();
         }
+    }
+
+    void AvoidPlayer()
+    {
+        playerMaskIndex = LayerMask.NameToLayer("Player");
+        withoutPlayerMask = 1 << playerMaskIndex;
+        withoutPlayerMask = ~withoutPlayerMask;
     }
 
     void MoveForward()
@@ -68,7 +78,6 @@ public class FishAI : MonoBehaviour
     void CheckHit()
     {
 
-
         Vector3 startPos,centerCheckEndPos,leftCheckEndPos,rightCheckEndPos;
 
         if(transform.childCount>0)
@@ -83,52 +92,39 @@ public class FishAI : MonoBehaviour
         float rotationAmount = 0f;
         Vector3 crossProduct = Vector3.zero;
 
-        bool isCollidingLeft = Physics.Raycast(startPos, leftCheckEndPos, out hitLeft, fishData.fish.collisionDetectRayDistance);
-        bool isCollidingRight = Physics.Raycast(startPos, rightCheckEndPos, out hitRight, fishData.fish.collisionDetectRayDistance);
+        bool isCollidingLeft = Physics.Raycast(startPos, leftCheckEndPos, out hitLeft, fishData.fish.collisionDetectRayDistance , withoutPlayerMask);
+        bool isCollidingRight = Physics.Raycast(startPos, rightCheckEndPos, out hitRight, fishData.fish.collisionDetectRayDistance, withoutPlayerMask);
 
         if(isCollidingRight && isCollidingLeft)
         {
             canRotateRandomly = false;
-            Debug.DrawRay(startPos, leftCheckEndPos, Color.red);
-            Debug.DrawRay(startPos, rightCheckEndPos, Color.red);
+            Helpers.De_Ray(startPos, leftCheckEndPos, Color.red);
+            Helpers.De_Ray(startPos, rightCheckEndPos, Color.red);
         }
 
         else if(isCollidingLeft)
         {
-            Debug.DrawRay(startPos, leftCheckEndPos, Color.red);
-            Debug.DrawRay(startPos, rightCheckEndPos, Color.yellow);
+            Helpers.De_Ray(startPos, leftCheckEndPos, Color.red);
+            Helpers.De_Ray(startPos, rightCheckEndPos, Color.yellow);
             randomRotationDirection = 1;
         }
 
         else if(isCollidingRight)
         {
             randomRotationDirection = 0;
-            Debug.DrawRay(startPos, rightCheckEndPos, Color.red);
-            Debug.DrawRay(startPos, leftCheckEndPos, Color.yellow);
+            Helpers.De_Ray(startPos, rightCheckEndPos, Color.red);
+            Helpers.De_Ray(startPos, leftCheckEndPos, Color.yellow);
         }
 
         else
         {
-            Debug.DrawRay(startPos, leftCheckEndPos, Color.yellow);
-            Debug.DrawRay(startPos, rightCheckEndPos, Color.yellow);
+            Helpers.De_Ray(startPos, leftCheckEndPos, Color.yellow);
+            Helpers.De_Ray(startPos, rightCheckEndPos, Color.yellow);
         }
 
-        // if(isCollidingLeft && isCollidingRight)
-        // {
-        //     rotationAmount = fishData.fish.rotationSpeed*Time.deltaTime;
-
-        //     //calculate resultant
-        //     Vector3 resultant = hitLeft.normal + hitRight.normal;
-
-        //     Debug.DrawRay(startPos, resultant * 5, Color.red);
-
-        //     // if cross is positive then turn right else turn left
-        //     crossProduct = Vector3.Cross(resultant,transform.right);
-        // }
-
-        if(Physics.Raycast(startPos, centerCheckEndPos, out hitCenter, fishData.fish.collisionDetectRayDistance)) // center checks the left and right.
+        if(Physics.Raycast(startPos, centerCheckEndPos, out hitCenter, fishData.fish.collisionDetectRayDistance, withoutPlayerMask)) // center checks the left and right.
         {
-            Debug.DrawRay(startPos, centerCheckEndPos, Color.red);
+            Helpers.De_Ray(startPos, centerCheckEndPos, Color.red);
 
             canRotateRandomly = false;
 
@@ -145,7 +141,7 @@ public class FishAI : MonoBehaviour
         else
         {
             canRotateRandomly = true;
-            Debug.DrawRay(startPos, centerCheckEndPos, Color.yellow);
+            Helpers.De_Ray(startPos, centerCheckEndPos, Color.yellow);
         }
 
         if(crossProduct.y != 0 && !canRotateRandomly)
@@ -155,6 +151,5 @@ public class FishAI : MonoBehaviour
             else
                 transform.Rotate(0f,-rotationAmount,0f,Space.World);
         }
-        
     }
 }
