@@ -7,7 +7,7 @@ namespace Game.UI
 {
 
     [System.Serializable]
-    public class SaveData
+    public sealed class SaveData
     {
         public bool masterAudio,goodGraphics;
         public float ambientVol,musicVol;
@@ -21,7 +21,7 @@ namespace Game.UI
         }
     }
 
-    public class SettingsUIManager : MonoBehaviour
+    public sealed class SettingsUIManager : MonoBehaviour
     {
 
         [SerializeField]

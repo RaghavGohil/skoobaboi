@@ -26,7 +26,7 @@ public class Level : MonoBehaviour
 
     void FixedUpdate()
     {
-        if(GameManagerOld.instance.isDiving)
+        if(GameManager.instance.gameState == GameManager.GameState.Dive)
             CalculateLevel();
     }
 

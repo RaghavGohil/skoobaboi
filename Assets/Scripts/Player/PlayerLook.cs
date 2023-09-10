@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerLook : MonoBehaviour
+public sealed class PlayerLook : MonoBehaviour
 {
 
     float sens;
@@ -31,6 +31,6 @@ public class PlayerLook : MonoBehaviour
 
         xrot = Mathf.Clamp(xrot,-90f,90f);
 
-        transform.localRotation = Quaternion.Euler(GameManagerOld.instance.cameraRotation.x + xrot,GameManagerOld.instance.cameraRotation.y,GameManagerOld.instance.cameraRotation.z);
+        transform.localRotation = Quaternion.Euler(GameManager.instance.cameraRotation.x + xrot,GameManager.instance.cameraRotation.y,GameManager.instance.cameraRotation.z);
     }
 }

@@ -2,7 +2,7 @@
 // the component is only attached to hostile fishes
 
 using UnityEngine;
-using Game.Helpers;
+using Game.HelperFunctions;
 
 public sealed class FishAttack : MonoBehaviour
 {
@@ -36,7 +36,7 @@ public sealed class FishAttack : MonoBehaviour
     void CheckPlayerInViewRange()
     {
 
-        Helpers.De_Sphere(transform.position, fishData.fish.viewRangeRadius * transform.forward, Color.red);
+        Helper.De_Sphere(transform.position, fishData.fish.viewRangeRadius * transform.forward, Color.red);
 
         Collider[] cols = Physics.OverlapSphere(transform.position, fishData.fish.viewRangeRadius);
 
@@ -55,7 +55,7 @@ public sealed class FishAttack : MonoBehaviour
 
     void CheckPlayerInAttackRange()
     {
-        Helpers.De_Sphere(transform.position, fishData.fish.viewRangeRadius * transform.right, Color.yellow);
+        Helper.De_Sphere(transform.position, fishData.fish.viewRangeRadius * transform.right, Color.yellow);
 
         if(Physics.CheckSphere(transform.position, fishData.fish.attackRangeRadius , playerMask))
         {

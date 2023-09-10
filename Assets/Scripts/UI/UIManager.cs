@@ -10,6 +10,7 @@ using System; // for the delegates
 using System.Collections; // for the IEnum
 using UnityEngine.SceneManagement;
 using Game.Sound;
+using Game.HelperFunctions;
 
 namespace Game.UI
 {
@@ -40,8 +41,7 @@ namespace Game.UI
         [SerializeField]
         GameObject UIDisabler; // neat little trick to disable the ui components on start
 
-        internal const float uiDisableTime = 2.5f;
-        internal const float diveUIStartTime = 4f;
+        const float uiDisableTime = 2.5f;
 
         public bool hasPausedGame{get;private set;}
 
@@ -70,6 +70,17 @@ namespace Game.UI
             StartCoroutine(EnableUIOnStart());
         }
 
+        void Update()
+        {
+            if(GameManager.instance != null)
+            {
+                if(Input.GetKeyDown(KeyCode.Escape) && GameManager.instance.gameState == GameManager.GameState.Dive)
+                {
+                    PauseUI();
+                }
+            }
+        }
+
         void InitializeUI()
         {
             mainUI.SetActive(false);
@@ -83,21 +94,10 @@ namespace Game.UI
             winUI.SetActive(false);
         }
 
-        void Update()
-        {
-            if(GameManagerOld.instance != null)
-            {
-                if(Input.GetKeyDown(KeyCode.Escape) && GameManagerOld.instance.isDiving)
-                {
-                    PauseUI();
-                }
-            }
-        }
-
         void SwitchUIState(UIState state)
         {
 
-            currentUIState = state;
+            this.currentUIState = state;
 
             InitializeUI(); // set all the ui components to false so that you can enable only one thing at once
 
@@ -108,7 +108,7 @@ namespace Game.UI
 
                     pauseUI.SetActive(true);
 
-                    GameManagerOld.instance?.UpdateMouseState(); // if the game manager is there, then update the cursor state
+                    GameManager.instance?.UpdateMouseState(); // if the game manager is there, then update the cursor state
                     
                     Time.timeScale = 0f;
                     if(AudioManager.instance != null)
@@ -120,7 +120,10 @@ namespace Game.UI
                     break;
                 case UIState.Dive:
                     diveEvent?.Invoke(); // null propagator to check if diveEvent is null or not (if !null -> execute)
-                    Invoke("StartDiveUI",diveUIStartTime);
+                    if (GameManager.instance != null)
+                        Invoke("StartDiveUI", GameManager.instance.diveTransitionTime);
+                    else
+                        Helper.Log("GameManager is missing!",2);
                     break;
                 case UIState.Settings:
                     settingsUI.SetActive(true);
@@ -144,7 +147,7 @@ namespace Game.UI
                     gameUI.SetActive(true);
                     break;
                 default:
-                    currentUIState = UIState.Def;
+                    this.currentUIState = UIState.Def;
                     break;
             }
         }

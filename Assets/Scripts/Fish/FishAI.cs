@@ -1,5 +1,5 @@
 using UnityEngine;
-using Game.Helpers;
+using Game.HelperFunctions;
 
 public class FishAI : MonoBehaviour
 {
@@ -37,7 +37,7 @@ public class FishAI : MonoBehaviour
 
     void FixedUpdate()
     {
-        if(GameManagerOld.instance.isDiving)
+        if(GameManager.instance.gameState == GameManager.GameState.Dive)
         {
             MoveForward();
             CheckHit();
@@ -98,33 +98,33 @@ public class FishAI : MonoBehaviour
         if(isCollidingRight && isCollidingLeft)
         {
             canRotateRandomly = false;
-            Helpers.De_Ray(startPos, leftCheckEndPos, Color.red);
-            Helpers.De_Ray(startPos, rightCheckEndPos, Color.red);
+            Helper.De_Ray(startPos, leftCheckEndPos, Color.red);
+            Helper.De_Ray(startPos, rightCheckEndPos, Color.red);
         }
 
         else if(isCollidingLeft)
         {
-            Helpers.De_Ray(startPos, leftCheckEndPos, Color.red);
-            Helpers.De_Ray(startPos, rightCheckEndPos, Color.yellow);
+            Helper.De_Ray(startPos, leftCheckEndPos, Color.red);
+            Helper.De_Ray(startPos, rightCheckEndPos, Color.yellow);
             randomRotationDirection = 1;
         }
 
         else if(isCollidingRight)
         {
             randomRotationDirection = 0;
-            Helpers.De_Ray(startPos, rightCheckEndPos, Color.red);
-            Helpers.De_Ray(startPos, leftCheckEndPos, Color.yellow);
+            Helper.De_Ray(startPos, rightCheckEndPos, Color.red);
+            Helper.De_Ray(startPos, leftCheckEndPos, Color.yellow);
         }
 
         else
         {
-            Helpers.De_Ray(startPos, leftCheckEndPos, Color.yellow);
-            Helpers.De_Ray(startPos, rightCheckEndPos, Color.yellow);
+            Helper.De_Ray(startPos, leftCheckEndPos, Color.yellow);
+            Helper.De_Ray(startPos, rightCheckEndPos, Color.yellow);
         }
 
         if(Physics.Raycast(startPos, centerCheckEndPos, out hitCenter, fishData.fish.collisionDetectRayDistance, withoutPlayerMask)) // center checks the left and right.
         {
-            Helpers.De_Ray(startPos, centerCheckEndPos, Color.red);
+            Helper.De_Ray(startPos, centerCheckEndPos, Color.red);
 
             canRotateRandomly = false;
 
@@ -141,7 +141,7 @@ public class FishAI : MonoBehaviour
         else
         {
             canRotateRandomly = true;
-            Helpers.De_Ray(startPos, centerCheckEndPos, Color.yellow);
+            Helper.De_Ray(startPos, centerCheckEndPos, Color.yellow);
         }
 
         if(crossProduct.y != 0 && !canRotateRandomly)

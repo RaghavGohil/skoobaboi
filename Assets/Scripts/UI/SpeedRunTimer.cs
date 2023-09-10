@@ -7,9 +7,9 @@ public sealed class SpeedRunTimer : MonoBehaviour
     [SerializeField]
     TMP_Text timerText;
 
-    internal float minutes,seconds;
+    float minutes,seconds;
 
-    internal bool showUIAnimation;
+    bool showUIAnimation;
 
     void Start()
     {
@@ -20,9 +20,9 @@ public sealed class SpeedRunTimer : MonoBehaviour
 
     void FixedUpdate()
     {
-        if(GameManagerOld.instance != null)
+        if(GameManager.instance != null)
         {
-            if(GameManagerOld.instance.isDiving)
+            if(GameManager.instance.gameState == GameManager.GameState.Dive)
             {
                 CalculateTime();
                 UpdateTime();
@@ -33,13 +33,13 @@ public sealed class SpeedRunTimer : MonoBehaviour
 
     }
 
-    internal void ShowAnimation()
+    void ShowAnimation()
     {
         timerText.transform.GetComponent<Animator>().Play("SpeedRunTimer");
         showUIAnimation = false;
     }
 
-    internal void CalculateTime()
+    void CalculateTime()
     {
         seconds += Time.deltaTime;
         if(seconds > 59.99f)
@@ -49,7 +49,7 @@ public sealed class SpeedRunTimer : MonoBehaviour
         }
     }
 
-    internal void UpdateTime()
+    void UpdateTime()
     {
         timerText.text = minutes.ToString("00") + ":" + seconds.ToString("00");
     }
