@@ -20,8 +20,6 @@ public class GameManagerOld : MonoBehaviour
     GameObject character,lobbyCamera,playerCamera,player;
     [SerializeField]
     GameObject bounds;
-
-    public float diveUIStartTime{get;private set;}
     float diveTransitionTime;
     public Vector3 cameraRotation;
 
@@ -30,6 +28,7 @@ public class GameManagerOld : MonoBehaviour
 
         instance = this;
         InitializeDefaults();
+        SetObservers();
 
         // helpers
         Helpers.canDrawDebugRays = false;
@@ -39,7 +38,6 @@ public class GameManagerOld : MonoBehaviour
 
     public void InitializeDefaults()
     {
-        diveUIStartTime = 4.0f;
         diveTransitionTime = 4.0f;
         canDive = true;
         startedDiving = false;
@@ -106,4 +104,21 @@ public class GameManagerOld : MonoBehaviour
         player.transform.position = playerPos;
         playerCamera.SetActive(true);
     }
+    
+    void SetObservers()
+    {
+        UIManager.instance.diveEvent += Test1;
+    }
+
+    void OnDestroy()
+    {
+        UIManager.instance.diveEvent -= Test1;
+    }
+
+    #region delegate functions to be added/removed in game
+        void Test1()
+        {
+            startedDiving = true;
+        }
+    #endregion
 }

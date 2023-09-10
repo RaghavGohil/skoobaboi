@@ -1,5 +1,13 @@
+/**
+UIManager script is responsible for handling:
+all the ui elements in the game
+the pause ui in the game and it's state
+set an action for the dive event
+**/
+
 using UnityEngine;
-using System.Collections;
+using System; // for the delegates
+using System.Collections; // for the IEnum
 using UnityEngine.SceneManagement;
 using Game.Sound;
 
@@ -32,12 +40,14 @@ namespace Game.UI
         [SerializeField]
         GameObject UIDisabler; // neat little trick to disable the ui components on start
 
-        [SerializeField][Header("On the start the UI will be disabled")]
-        
-        internal readonly float uiDisableTime = 2.5f;
+        internal const float uiDisableTime = 2.5f;
+        internal const float diveUIStartTime = 4f;
 
         public bool hasPausedGame{get;private set;}
-        public bool canAccessPause{get;private set;}
+
+        public event Action diveEvent; // if 'event' is there then there is no need to add the getter and setter
+        public event Action loseEvent; // TODO: stop the player from moving in the future when the player wins the game
+        public event Action winEvent;
 
         // Start is called before the first frame update
         void Awake()
@@ -75,12 +85,13 @@ namespace Game.UI
 
         void Update()
         {
-            #region Do the input manager thing here
+            if(GameManagerOld.instance != null)
+            {
                 if(Input.GetKeyDown(KeyCode.Escape) && GameManagerOld.instance.isDiving)
                 {
                     PauseUI();
                 }
-            #endregion
+            }
         }
 
         void SwitchUIState(UIState state)
@@ -93,19 +104,23 @@ namespace Game.UI
             switch(currentUIState)
             {
                 case UIState.Pause:
+                    hasPausedGame = true;
+
                     pauseUI.SetActive(true);
+
+                    GameManagerOld.instance?.UpdateMouseState(); // if the game manager is there, then update the cursor state
+                    
+                    Time.timeScale = 0f;
+                    if(AudioManager.instance != null)
+                        AudioManager.instance.increasingAmbientVolume = false;
+                    
                     break;
                 case UIState.Main:
                     mainUI.SetActive(true);
                     break;
                 case UIState.Dive:
-                    if(GameManagerOld.instance != null)
-                    {
-                        GameManagerOld.instance.startedDiving = true;
-                        Invoke("StartDiveUI",GameManagerOld.instance.diveUIStartTime);
-                    }
-                    else
-                        Debug.LogError("Unable to get the game manager script!");
+                    diveEvent?.Invoke(); // null propagator to check if diveEvent is null or not (if !null -> execute)
+                    Invoke("StartDiveUI",diveUIStartTime);
                     break;
                 case UIState.Settings:
                     settingsUI.SetActive(true);
@@ -133,18 +148,12 @@ namespace Game.UI
                     break;
             }
         }
-
-        // buttons
-        #region Look later
-            public void PlayButtonAudio()
-            {
-                AudioManager.instance.PlayInGame("uibuttonclick");
-            }
-        #endregion
-        
-        
         
         #region public ui functions
+            public void PlayButtonAudio() // Play the ui button sound
+            {
+                AudioManager.instance?.PlayInGame("uibuttonclick");
+            }
             public void DiveUI()
             {
                 SwitchUIState(UIState.Dive);
@@ -181,41 +190,43 @@ namespace Game.UI
             {
                 Application.Quit();
             }
+
+            //Hardcoded this as this wont change anyway
+
+            public void RestartGame()
+            {
+                if(Time.timeScale == 0f)
+                    Time.timeScale = 1f;
+                SceneManager.LoadScene("MainGame");
+            }
+
+            public void Resume()
+            {
+                if(hasPausedGame)
+                {
+                    SwitchUIState(UIState.Game);
+                    hasPausedGame = false;
+                    Time.timeScale = 1f;
+                    if(AudioManager.instance != null)
+                        AudioManager.instance.increasingAmbientVolume = true;
+                }
+            }
+
+            //
+
         #endregion
 
+        #region private ui functions
         void PauseUI()
         {
-            hasPausedGame = !hasPausedGame;
-            pauseUI.SetActive(!pauseUI.activeSelf);
-            gameUI.SetActive(!gameUI.activeSelf);
-            GameManagerOld.instance.UpdateMouseState();
-            if(hasPausedGame)
-            {
-                Time.timeScale = 0f;
-                AudioManager.instance.increasingAmbientVolume = false;
-            }
-            else
-            {
-                Time.timeScale = 1f;
-                AudioManager.instance.increasingAmbientVolume = true;
-            }
+            if(gameUI.activeSelf) // only activate if the game is on
+                SwitchUIState(UIState.Pause);
         }
-
-        public void RestartGame()
-        {
-            if(Time.timeScale == 0f)
-                Time.timeScale = 1f;
-            SceneManager.LoadScene("MainGame");
-        }
-
-        public void Resume()
-        {
-            PauseUI();
-        }
+        #endregion
 
         void StartDiveUI()
         {
-            AudioManager.instance.PlayInGame("gameui");
+            AudioManager.instance?.PlayInGame("gameui");
             gameUI.SetActive(true);
         }
 

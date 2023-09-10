@@ -1,15 +1,15 @@
 using UnityEngine;
 using TMPro;
 
-public class SpeedRunTimer : MonoBehaviour
+public sealed class SpeedRunTimer : MonoBehaviour
 {
     
     [SerializeField]
     TMP_Text timerText;
 
-    float minutes,seconds;
+    internal float minutes,seconds;
 
-    bool showUIAnimation;
+    internal bool showUIAnimation;
 
     void Start()
     {
@@ -20,23 +20,26 @@ public class SpeedRunTimer : MonoBehaviour
 
     void FixedUpdate()
     {
-        if(GameManagerOld.instance.isDiving)
+        if(GameManagerOld.instance != null)
         {
-            CalculateTime();
-            UpdateTime();
-            if(showUIAnimation)
-                ShowAnimation();
+            if(GameManagerOld.instance.isDiving)
+            {
+                CalculateTime();
+                UpdateTime();
+                if(showUIAnimation)
+                    ShowAnimation();
+            }
         }
 
     }
 
-    void ShowAnimation()
+    internal void ShowAnimation()
     {
         timerText.transform.GetComponent<Animator>().Play("SpeedRunTimer");
         showUIAnimation = false;
     }
 
-    void CalculateTime()
+    internal void CalculateTime()
     {
         seconds += Time.deltaTime;
         if(seconds > 59.99f)
@@ -46,7 +49,7 @@ public class SpeedRunTimer : MonoBehaviour
         }
     }
 
-    void UpdateTime()
+    internal void UpdateTime()
     {
         timerText.text = minutes.ToString("00") + ":" + seconds.ToString("00");
     }
