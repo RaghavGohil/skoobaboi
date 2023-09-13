@@ -1,12 +1,12 @@
 using UnityEngine;
 
-public class FishGenerator : MonoBehaviour
+public sealed class FishGenerator : MonoBehaviour
 {
 
     [SerializeField]
     Fish[] fishes;
 
-    public static FishGenerator instance;
+    public static FishGenerator instance { get; private set; }
 
     void Awake()
     {

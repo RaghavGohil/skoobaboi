@@ -23,7 +23,7 @@ namespace Game.UI
         {
             Def, // the default state
             Pause,
-            Main,
+            Menu,
             Game,
             Dive,
             Settings,
@@ -37,7 +37,7 @@ namespace Game.UI
         public UIState currentUIState {get; private set;}
     
         [SerializeField]
-        GameObject mainUI,settingsUI,aboutUI,shopUI,howUI,gameUI,pauseUI,loseUI,winUI;
+        GameObject menuUI,settingsUI,aboutUI,shopUI,howUI,gameUI,pauseUI,loseUI,winUI;
         [SerializeField]
         GameObject UIDisabler; // neat little trick to disable the ui components on start
 
@@ -62,12 +62,14 @@ namespace Game.UI
 
         void Start()
         {
-            // at the start of the scene, we want the main panel to be active.
-            currentUIState = UIState.Def;
-            SwitchUIState(UIState.Main);
+            
+            this.currentUIState = UIState.Menu;
+
+            SwitchUIState(UIState.Menu);
 
             // we want to delay the ui interaction on start.
             StartCoroutine(EnableUIOnStart());
+
         }
 
         void Update()
@@ -83,7 +85,7 @@ namespace Game.UI
 
         void InitializeUI()
         {
-            mainUI.SetActive(false);
+            menuUI.SetActive(false);
             pauseUI.SetActive(false);
             settingsUI.SetActive(false);
             aboutUI.SetActive(false);
@@ -94,7 +96,7 @@ namespace Game.UI
             winUI.SetActive(false);
         }
 
-        void SwitchUIState(UIState state)
+        public void SwitchUIState(UIState state) // only the game manager can change this
         {
 
             this.currentUIState = state;
@@ -115,8 +117,8 @@ namespace Game.UI
                         AudioManager.instance.increasingAmbientVolume = false;
                     
                     break;
-                case UIState.Main:
-                    mainUI.SetActive(true);
+                case UIState.Menu:
+                    menuUI.SetActive(true);
                     break;
                 case UIState.Dive:
                     diveEvent?.Invoke(); // null propagator to check if diveEvent is null or not (if !null -> execute)
@@ -163,7 +165,7 @@ namespace Game.UI
             }
             public void BackUI()
             {
-                SwitchUIState(UIState.Main);
+                SwitchUIState(UIState.Menu);
             }
             public void SettingsUI()
             {

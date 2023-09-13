@@ -4514,7 +4514,6 @@ GameObject:
   m_Component:
   - component: {fileID: 625845843}
   - component: {fileID: 625845842}
-  - component: {fileID: 625845844}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -4534,8 +4533,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38cd1bd3acbf77548b6ab98a982fc0a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startedDiving: 0
-  isDiving: 0
   character: {fileID: 710668119}
   lobbyCamera: {fileID: 330585543}
   playerCamera: {fileID: 1033570323}
@@ -4557,18 +4554,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &625845844
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 625845841}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 19b55dfec694c184ab61c13e10576a31, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &641372284
 GameObject:
   m_ObjectHideFlags: 0
@@ -23426,7 +23411,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3eb0620e5363bb409da2aa10f6fef27, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainUI: {fileID: 1565322845}
+  menuUI: {fileID: 1565322845}
   settingsUI: {fileID: 2094831536}
   aboutUI: {fileID: 1166588826}
   shopUI: {fileID: 1414649438}

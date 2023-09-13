@@ -9,7 +9,7 @@ using static Game.UI.UIManager;
 public class GameManager : MonoBehaviour
 {
 
-    public static GameManager instance; // this instance can be accessed anywhere!
+    public static GameManager instance { get; private set; } // this instance can be accessed anywhere!
 
     public enum GameState // all the states that the game has (state machine)
     {
@@ -44,7 +44,7 @@ public class GameManager : MonoBehaviour
 
         // helpers
         Helper.canLog = true;
-        Helper.canDrawDebugRays = false;
+        Helper.canDrawDebugRays = true;
         Helper.canDrawDebugSpheres = true;
 
         InitializeSystem();
@@ -55,7 +55,7 @@ public class GameManager : MonoBehaviour
         //set the observers
         SetObservers();
 
-        //set the game state:
+        //set the states:
         this.gameState = GameState.Menu;
 
         //instance var

@@ -36,11 +36,16 @@ namespace Game.HelperFunctions
                 Debug.DrawRay(startPos, endPos, color);
         }
 
-        public static void De_Sphere(Vector3 position, Vector3 position1, Color color) // change this implementation
+        public static void De_4DDirRay(Vector3 position,float len, Color color) // change this implementation
         {
             if(canDrawDebugSpheres)
             {
-                Debug.DrawRay(position, position1, color); 
+                Debug.DrawRay(position, Vector3.up * len, color);
+                Debug.DrawRay(position, Vector3.down * len, color);
+                Debug.DrawRay(position, Vector3.left * len, color);
+                Debug.DrawRay(position, Vector3.right * len, color);
+                Debug.DrawRay(position, Vector3.forward * len, color);
+                Debug.DrawRay(position, Vector3.back * len, color);
             }
         }
 
